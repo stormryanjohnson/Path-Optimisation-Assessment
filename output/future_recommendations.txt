@@ -1,0 +1,11 @@
+For a future endurance trail, the following additional information should be requested from the client:
+    
+    1. Participant fitness levels and walking speeds.
+    2. Weather conditions, including temperature and humidity.
+    3. Terrain information, such as soil type and significant obstacles and/or areas to avoid.
+    4. Data on potential water sources and resting points.
+
+With this information, we would have to include additional constraints on the path, which would involve 
+ensuring that the path does not exceed a certain maximum length, that it avoids any dangerous or inaccessible 
+areas, and that it passes certain suitable locations for resting. Overall, these additional inclusions will 
+ensure a challenging but safe endurance trail.
