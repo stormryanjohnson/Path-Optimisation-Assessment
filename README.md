@@ -27,15 +27,15 @@ Your solution should consist of the following components:
     - Note: for simplicity, you can assume that trail participants have a fixed body mass and a
     fixed walking speed.
 4. Simple reporting
-- First write your path solution to a .csv file with the following column headings: x_coord
-and y_coord .
-- Then write your path, overlaid on the altitude map, to a .png file.
-- Your solution coordinates should be measured from the South-Western corner of the
-map (x=0, y=0) and should be measured in points that correspond to the resolution of the
-altitude map (i.e. one point for every 10m 2 square).
-- The company also wants advice about a possible future endurance trail. Write a short
-paragraph in a .txt file explaining what other information you would like to request from
-them and how you might change your approach in future.
+    - First write your path solution to a .csv file with the following column headings: x_coord
+    and y_coord .
+    - Then write your path, overlaid on the altitude map, to a .png file.
+    - Your solution coordinates should be measured from the South-Western corner of the
+    map (x=0, y=0) and should be measured in points that correspond to the resolution of the
+    altitude map (i.e. one point for every 10m 2 square).
+    - The company also wants advice about a possible future endurance trail. Write a short
+    paragraph in a .txt file explaining what other information you would like to request from
+    them and how you might change your approach in future.
 
 The above steps should run end-to-end (.csv to results) with a single call to a script. Your solution must
 be written using only open source tools (e.g. python, R, ...) so we can run your solution and check your
