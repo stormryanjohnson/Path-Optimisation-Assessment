@@ -11,29 +11,26 @@ start = time.perf_counter()
 # *------------------------STEP 1: Ingestion------------------------*
 
 # Read altitude map and energy expenditure data
-altitude_df = pd.read_csv('./data/altitude_map.csv', header=None)
-expenditure_df = pd.read_csv('./data/energy_cost.csv')
+altitude_df = pd.read_csv('../data/altitude_map.csv', header=None)
+expenditure_df = pd.read_csv('../data/energy_cost.csv')
 alt_len = len(altitude_df) - 1
 
 
 # *------------------------STEP 2: Modelling------------------------*
 
 '''
-NB:     For brevity, the chosen model is a Support Vector Machine (SVM) with its default hyperparameters. 
+NB:     For brevity, the chosen model is a Support Vector Machine (SVM). 
         SVM is appropriate because of the nonlinear nature of the data, and it generally works well with small datasets.
         Some alternative models to consider include: 
-            - Any tree-based regressor (although these tend to overfit and would likely require hyperparameter tuning),
+            - Any tree-based regressor,
             - Linear regression with polynomial feature transformation.
-        
-        The model can be improved and evaluated using standard hyperparameter tuning and cross validation techniques,
-        however from inspection of './output/modelling.png' (which shows the SVM model fitted to the data), it seems as 
-        though the default model will suffice for the purposes of this assessment.
+        The optimal hyperparameters for the SVM model were btained through tuning in the model_training/model_training.ipynb notebook.
 '''
 
 # Build a model to predict energy expenditure based on gradient
 X = expenditure_df['gradient'].values.reshape(-1, 1)
 y = expenditure_df['energy_cost'].values
-model = SVR()
+model = SVR(C=800, gamma=8)  # model hyperparameters were obtained through tuning in the model_training/model_training.ipynb notebook
 model.fit(X, y)
 
 # Generate a range of gradient values for prediction
@@ -42,13 +39,12 @@ X_pred = np.linspace(X.min(), X.max(), 100).reshape(-1, 1)
 # Use the model to predict energy expenditure for these gradient values
 y_pred = model.predict(X_pred)
 
-# Plot and save the data points with fitted line
+# Plot and save original data points
 plt.plot(X, y, '.', label='Original Data', color='blue')
-plt.plot(X_pred, y_pred, '-', label='SVR Prediction', color='red')
 plt.xlabel('Gradient')
 plt.ylabel(r'Energy Expenditure  ($J.kg^{-1}.min^{-1}$)')
 plt.legend()
-plt.savefig('./output/modelling.png', dpi=1000, bbox_inches='tight')
+plt.savefig('../data/energy_cost.png', dpi=1000, bbox_inches='tight')
 
 # Convert the gradient DataFrames to a NumPy array for plotting
 altitude_data = altitude_df.values
@@ -66,42 +62,22 @@ gradient_x_df = pd.DataFrame(gradient_x, columns=altitude_df.columns)
 gradient_y_df = pd.DataFrame(gradient_y, columns=altitude_df.columns)
 energy_df = pd.DataFrame(energy_total, columns=altitude_df.columns)
 
-# Visualise altitude, gradients and energy expenditure through heatmaps
+# Visualise altitude and energy expenditure through heatmaps
 plt.figure(figsize=(10, 8))  
 plt.imshow(altitude_data, cmap='viridis', origin='lower', aspect='auto')
 plt.colorbar(label='Altitude (meters)')  
-plt.title('Altitude Heatmap')
-plt.xlabel('X Coordinate (10 meters)')
-plt.ylabel('Y Coordinate (10 meters)')
+plt.xlabel(r'X Coordinate ($\times$10 meters)')
+plt.ylabel(r'Y Coordinate ($\times$10 meters)')
 plt.grid(False)  
-plt.savefig('./output/altitude_map.png', dpi=1000, bbox_inches='tight')
-
-plt.figure(figsize=(10, 8))  
-plt.imshow(gradient_x_df, cmap='plasma', origin='lower', aspect='auto')
-plt.colorbar(label='Gradient')
-plt.title('Gradient X Heatmap')
-plt.xlabel('X Coordinate (10 meters)')
-plt.ylabel('Y Coordinate (10 meters)')
-plt.grid(False)
-plt.savefig('./output/gradient_x_map.png', dpi=1000, bbox_inches='tight')
-
-plt.figure(figsize=(10, 8))  
-plt.imshow(gradient_y_df, cmap='plasma', origin='lower', aspect='auto')
-plt.colorbar(label='Gradient')
-plt.title('Gradient Y Heatmap')
-plt.xlabel('X Coordinate (10 meters)')
-plt.ylabel('Y Coordinate (10 meters)')
-plt.grid(False)
-plt.savefig('./output/gradient_y_map.png', dpi=1000, bbox_inches='tight')
+plt.savefig('../data/altitude_map.png', dpi=1000, bbox_inches='tight')
 
 plt.figure(figsize=(10, 8))  
 plt.imshow(energy_df, cmap='plasma', origin='lower', aspect='auto')
 plt.colorbar(label=r'Energy Expenditure ($J.kg^{-1}.min^{-1}$)')
-plt.title('Energy Expenditure Heatmap')
 plt.xlabel('X Coordinate (10 meters)')
 plt.ylabel('Y Coordinate (10 meters)')
 plt.grid(False)
-plt.savefig('./output/energy_expenditure_map.png', dpi=1000, bbox_inches='tight')
+plt.savefig('../output/energy_expenditure_map.png', dpi=1000, bbox_inches='tight')
 
 
 # *------------------------STEP 3: Optimisation------------------------*
@@ -198,19 +174,18 @@ print('Optimal energy expenditure: ', optimal_energy, 'J')
 
 # Write the optimal path coordinates to a CSV file
 path_df = pd.DataFrame(optimal_path, columns=['x_coord', 'y_coord'])
-path_df.to_csv('./output/optimal_path.csv', index=False)
+path_df.to_csv('../output/optimal_path.csv', index=False)
 
 # Create a visualization of the altitude map with the optimal path
 plt.figure(figsize=(10, 8)) 
 plt.imshow(altitude_data, cmap='viridis', origin='lower', aspect='auto')
 plt.colorbar(label='Altitude (meters)')  
-plt.title('Altitude Heatmap with Optimal Path')
-plt.xlabel('X Coordinate (10 meters)')
-plt.ylabel('Y Coordinate (10 meters)')
+plt.xlabel(r'X Coordinate ($\times$10 meters)')
+plt.ylabel(r'Y Coordinate ($\times$10 meters)')
 plt.grid(False) 
 for x, y in optimal_path:
     plt.scatter(x=x, y=y, c='r', s=5)  # Mark the optimal path in red
-plt.savefig('./output/altitude_map_with_path.png', dpi=1000, bbox_inches='tight')
+plt.savefig('../output/altitude_map_with_path.png', dpi=1000, bbox_inches='tight')
 
 
 # End time counter
