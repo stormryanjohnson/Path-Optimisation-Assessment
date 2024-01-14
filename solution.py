@@ -24,7 +24,7 @@ NB:     For brevity, the chosen model is a Support Vector Machine (SVM).
         Some alternative models to consider include: 
             - Any tree-based regressor,
             - Linear regression with polynomial feature transformation.
-        The optimal hyperparameters for the SVM model were btained through tuning in the model_training/model_training.ipynb notebook.
+        The optimal hyperparameters for the SVM model were obtained through tuning in the model_training/model_training.ipynb notebook.
 '''
 
 # Build a model to predict energy expenditure based on gradient
