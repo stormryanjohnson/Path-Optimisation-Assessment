@@ -11,8 +11,8 @@ start = time.perf_counter()
 # *------------------------STEP 1: Ingestion------------------------*
 
 # Read altitude map and energy expenditure data
-altitude_df = pd.read_csv('../data/altitude_map.csv', header=None)
-expenditure_df = pd.read_csv('../data/energy_cost.csv')
+altitude_df = pd.read_csv('./data/altitude_map.csv', header=None)
+expenditure_df = pd.read_csv('./data/energy_cost.csv')
 alt_len = len(altitude_df) - 1
 
 
@@ -44,7 +44,7 @@ plt.plot(X, y, '.', label='Original Data', color='blue')
 plt.xlabel('Gradient')
 plt.ylabel(r'Energy Expenditure  ($J.kg^{-1}.min^{-1}$)')
 plt.legend()
-plt.savefig('../data/energy_cost.png', dpi=1000, bbox_inches='tight')
+plt.savefig('./data/energy_cost.png', dpi=1000, bbox_inches='tight')
 
 # Convert the gradient DataFrames to a NumPy array for plotting
 altitude_data = altitude_df.values
@@ -69,7 +69,7 @@ plt.colorbar(label='Altitude (meters)')
 plt.xlabel(r'X Coordinate ($\times$10 meters)')
 plt.ylabel(r'Y Coordinate ($\times$10 meters)')
 plt.grid(False)  
-plt.savefig('../data/altitude_map.png', dpi=1000, bbox_inches='tight')
+plt.savefig('./data/altitude_map.png', dpi=1000, bbox_inches='tight')
 
 plt.figure(figsize=(10, 8))  
 plt.imshow(energy_df, cmap='plasma', origin='lower', aspect='auto')
@@ -77,7 +77,7 @@ plt.colorbar(label=r'Energy Expenditure ($J.kg^{-1}.min^{-1}$)')
 plt.xlabel('X Coordinate (10 meters)')
 plt.ylabel('Y Coordinate (10 meters)')
 plt.grid(False)
-plt.savefig('../output/energy_expenditure_map.png', dpi=1000, bbox_inches='tight')
+plt.savefig('./output/energy_expenditure_map.png', dpi=1000, bbox_inches='tight')
 
 
 # *------------------------STEP 3: Optimisation------------------------*
@@ -167,14 +167,14 @@ for i in range(energy_df.shape[1]):
             optimal_energy = energy
     print(str(i) + ' / ' + str(energy_df.shape[1]))
 
-print('Optimal energy expenditure: ', optimal_energy, 'J')
+print('Optimal energy expenditure: ', optimal_energy, 'J/(kg.min)')
 
 
 # *------------------------STEP 4: Simple reporting------------------------*
 
 # Write the optimal path coordinates to a CSV file
 path_df = pd.DataFrame(optimal_path, columns=['x_coord', 'y_coord'])
-path_df.to_csv('../output/optimal_path.csv', index=False)
+path_df.to_csv('./output/optimal_path.csv', index=False)
 
 # Create a visualization of the altitude map with the optimal path
 plt.figure(figsize=(10, 8)) 
@@ -185,7 +185,7 @@ plt.ylabel(r'Y Coordinate ($\times$10 meters)')
 plt.grid(False) 
 for x, y in optimal_path:
     plt.scatter(x=x, y=y, c='r', s=5)  # Mark the optimal path in red
-plt.savefig('../output/altitude_map_with_path.png', dpi=1000, bbox_inches='tight')
+plt.savefig('./output/altitude_map_with_path.png', dpi=1000, bbox_inches='tight')
 
 
 # End time counter
